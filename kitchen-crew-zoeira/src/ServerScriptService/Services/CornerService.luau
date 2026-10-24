@@ -11,11 +11,13 @@ local function notify(player, message)
     if player and player.Parent == Players then remote:FireClient(player,"Notice",{message=message}) end
 end
 
-local function bill(session)
+local function bill(session, force)
     if session.paused then return true end
     local now = os.clock()
     local elapsed = math.max(0, math.floor(now - session.lastBilled))
-    if elapsed < 1 then return true end
+    local record = Profiles.Get(session.owner.UserId)
+    local remaining = record and record.cornerSeconds or 0
+    if elapsed < 1 or (not force and elapsed < math.min(5, remaining)) then return true end
     session.lastBilled += elapsed
     local ok, result = Profiles.ConsumeCornerTime(session.owner.UserId,elapsed)
     if ok then refresh(session.owner) end
@@ -24,7 +26,7 @@ end
 
 local function finish(session)
     if sessions[session.target.UserId] ~= session then return end
-    bill(session)
+    bill(session, true)
     sessions[session.target.UserId] = nil
     if session.target and session.target.Parent == Players then
         remote:FireClient(session.target,"CornerUpdate",{active=false})
@@ -121,7 +123,7 @@ function Corner.Action(player, action)
     end
     if player ~= session.owner then return false,"Apenas o organizador pode pausar" end
     if action == "pause" and not session.paused then
-        bill(session)
+        bill(session, true)
         session.paused = true
     elseif action == "resume" and session.paused then
         session.paused = false
