@@ -1,0 +1,19 @@
+{
+  "name": "Kitchen Crew - Loja da Zoeira",
+  "tree": {
+    "$className": "DataModel",
+    "ReplicatedStorage": {
+      "$className": "ReplicatedStorage",
+      "Shared": {"$path": "src/ReplicatedStorage/Shared"}
+    },
+    "ServerScriptService": {
+      "$className": "ServerScriptService",
+      "Services": {"$path": "src/ServerScriptService/Services"},
+      "Main": {"$path": "src/ServerScriptService/Main.server.luau"}
+    },
+    "StarterPlayer": {
+      "$className": "StarterPlayer",
+      "StarterPlayerScripts": {"$path": "src/StarterPlayer/StarterPlayerScripts"}
+    }
+  }
+}
