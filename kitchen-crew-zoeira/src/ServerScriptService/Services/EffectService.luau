@@ -264,7 +264,12 @@ function Effects.SpawnBanana(position, source, onTouch)
     banana.Material = Enum.Material.SmoothPlastic
     banana.Anchored = true
     banana.CanCollide = false
-    banana.Position = position + Vector3.new(0,.2,0)
+    local rayParams = RaycastParams.new()
+    rayParams.FilterType = Enum.RaycastFilterType.Exclude
+    rayParams.FilterDescendantsInstances = {source.Character}
+    local hit = workspace:Raycast(position+Vector3.new(0,4,0),Vector3.new(0,-18,0),rayParams)
+    if not hit then return false end
+    banana.Position = hit.Position + Vector3.new(0,.18,0)
     banana.Parent = workspace
     local used = false
     banana.Touched:Connect(function(hit)
